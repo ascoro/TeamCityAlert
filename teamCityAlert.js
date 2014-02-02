@@ -15,8 +15,10 @@ var getServerDetails = function(){
 try
   {
 	var servers = JSON.parse(localStorage["teamcitysettings"]||"[]")||[];
-
-	return servers[0];
+	var server=servers[0];
+	if(server&&server.host&&server.username&&server.password){
+		return server;
+	}
 	}catch(err){
 	}
 	return undefined;
