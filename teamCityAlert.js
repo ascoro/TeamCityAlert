@@ -116,10 +116,15 @@ var parseOutput=function(who,status,version,type){
 		break;
 	}
 }
+var getDateTimeMinute = function(){
+	var d=new Date();
+	return d.getHours()+":"+d.getMinutes();
+}
+
 var showMessage=function(image,title,message){
 var opt = {
   type: "basic",
-  title: title,
+  title: title +" "+ getDateTimeMinute(),
   message: message,
   iconUrl: image,
   buttons: [{ title: 'Settings', 
