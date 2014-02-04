@@ -6,6 +6,8 @@
 // Copyright (c) 2014 Albert Serra <ascorodev@gmail.com>. All rights reserved.
 //
 
+var alertNoConnection=false;
+
 var init = function(){
 	detectStatus();
 	setInterval(detectStatus,30000);
@@ -24,7 +26,7 @@ try
 	return undefined;
 }
 
-var getURLContent = function(url,callback){
+var getURLContent = function(url,callback,callbackError){
 	var serverDetails=getServerDetails();
 	if(!serverDetails){
 		showMessage("warning.png","TeamCity no set up!","");
@@ -36,7 +38,13 @@ var getURLContent = function(url,callback){
 	xhr.onreadystatechange = function() {
 		//console.log(xhr.readyState);
 		if (xhr.readyState == 4) {
-			callback(xhr.responseText);
+			if(xhr.status == 200)
+				callback(xhr.responseText);
+			else{
+				if(callbackError){
+					callbackError(xhr.status);
+				}
+			}
 		}
 	}
 	xhr.send();
@@ -45,7 +53,7 @@ var getURLContent = function(url,callback){
 var detectStatus = function(callback){
 	getURLContent("/httpAuth/app/rest/builds/",function(text){
 		validateReturnURL(text);
-	});
+	},function(status){if(!alertNoConnection)showMessage("failure.png","Server not reachable!","Check that you set up the settings properly");alertNoConnection=true;});
 }
 
 var getValueBetween=function(content,a,b){
