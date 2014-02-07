@@ -109,9 +109,14 @@ var TeamCityService = new function(){
 		var status = getValueBetween(content,"status=\"","\"");
 		var buildId = getValueBetween(content,"id=\"","\"");
 		var buildTypeId = getValueBetween(content,"buildTypeId=\"","\"");
-				
+		
+		//TODO Remove time
+		var timeString = getValueBetween(content,"startDate=\"","\"");
+		
+		var time = timeString.substring(9,11)+":"+timeString.substring(11,13);
+		
 		if(status&&buildId&&buildTypeId){
-			build={status:status,buildId:buildId,buildTypeId:buildTypeId};
+			build={status:status,buildId:buildId,buildTypeId:buildTypeId,time:time};
 			return build;
 		}
 	}
@@ -183,7 +188,7 @@ var Messaging = new function(){
 		
 	}
 	var sendMessage=function(build){
-		var messageBuild = build.buildTypeId+" Build "+build.buildId;
+		var messageBuild = build.buildTypeId+" Build "+build.buildId+" at "+build.time;
 		var title = "";
 		var message = "";
 		var username = "";
