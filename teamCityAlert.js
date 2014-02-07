@@ -120,7 +120,8 @@ var TeamCityService = new function(){
 			var changeId = getValueBetween(text,"id=\"","\"");
 			Http.getURLContent("/httpAuth/app/rest/changes/id:"+changeId,function(textChange){
 				var username = getValueBetween(textChange,"username=\"","\"");
-				build.changes =[{username:username,changeId:changeId}];
+				var comment = getValueBetween(textChange,"<comment>","</comment>");
+				build.changes =[{username:username,changeId:changeId,comment:comment}];
 				callback(build);
 			});
 		});
@@ -188,6 +189,7 @@ var Messaging = new function(){
 		var username = "";
 		if(build.changes[0]){
 			username = build.changes[0].username;
+			message += build.changes[0].comment;
 		}
 		var img="warning.png";
 		switch(build.status){
