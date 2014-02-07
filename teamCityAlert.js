@@ -214,10 +214,3 @@ var Messaging = new function(){
 		Notification.showMessage(img,title,messageBuild+"\n\n"+message);
 	}
 }();
-
-var init = function(){
-	Messaging.checkBuilds();
-	setInterval(Messaging.checkBuilds,30000);
-}
-
-init();

@@ -5,7 +5,7 @@
   "description": "Show alerts for each build.",
   "version": "1.0",
   "background": {
-    "scripts": ["teamCityAlert.js"],
+    "scripts": ["teamCityAlert.js","app.js"],
     "persistent": true
   },
   "options_page": "options.html",
