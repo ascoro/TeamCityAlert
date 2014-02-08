@@ -20,6 +20,14 @@ var Settings = new function(){
 		}
 		return undefined;
 	};
+	thiz.getBuildTypeIdName = function(buildTypeId){
+		var servers = JSON.parse(localStorage["teamcitysettings"]||"[]")||[];
+		var server=servers[0];
+		if(server&&server.listBuildTypeIds&&server.listBuildTypeIds[buildTypeId]){
+			return server.listBuildTypeIds[buildTypeId];
+		}
+		return buildTypeId;
+	}
 }();
 
 var Http = new function(){
@@ -131,11 +139,11 @@ var TeamCityService = new function(){
 			});
 		});
 	}
-	thiz.getBuilds=function(callback){
+	thiz.getBuilds=function(callback,errorCallback){
 		Http.getURLContent("/httpAuth/app/rest/builds/",function(xmlBuilds){
 			parseBuilds(xmlBuilds);
 			callback(builds);
-		},notReachable);
+		},errorCallback||notReachable);
 	};
 }();
 
@@ -188,7 +196,7 @@ var Messaging = new function(){
 		
 	}
 	var sendMessage=function(build){
-		var messageBuild = build.buildTypeId+" Build "+build.buildId+" at "+build.time;
+		var messageBuild = Settings.getBuildTypeIdName(build.buildTypeId)+" Build "+build.buildId+" at "+build.time;
 		var title = "";
 		var message = "";
 		var username = "";
